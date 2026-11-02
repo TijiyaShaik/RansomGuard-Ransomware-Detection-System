@@ -1,0 +1,7 @@
+.env
+venv/
+__pycache__/
+*.pyc
+backups/versions/*
+protected_files/*
+security_alerts.json

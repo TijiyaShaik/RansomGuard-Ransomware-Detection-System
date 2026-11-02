@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ransomware Guard | Security Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">🛡</div>
+
+            <div>
+                <h2>RANSOM<span>GUARD</span></h2>
+                <p>SECURITY CENTER</p>
+            </div>
+        </div>
+
+        <div class="menu-label">MAIN MENU</div>
+
+        <nav class="navigation">
+
+            <a href="#overview" class="nav-item active">
+                <span>◈</span> Dashboard
+            </a>
+
+            <a href="#alerts" class="nav-item">
+                <span>⚠</span> Security Alerts
+            </a>
+
+            <a href="#backups" class="nav-item">
+                <span>▣</span> Backup Management
+            </a>
+
+            <a href="#recovery" class="nav-item">
+                <span>↻</span> Recovery
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-card">
+
+                <div class="system-indicator"></div>
+
+                <div>
+                    <h4>Dashboard Online</h4>
+                    <p>Security console available</p>
+                </div>
+
+            </div>
+
+            <p class="version">RANSOMGUARD v1.0</p>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div>
+                <p class="breadcrumb">SECURITY CENTER / OVERVIEW</p>
+                <h1>Security Dashboard</h1>
+                <p class="subtitle">
+                    Real-time file monitoring and threat analysis
+                </p>
+            </div>
+
+            <div class="topbar-right">
+
+                <span class="online-badge">
+                    <span class="online-dot"></span>
+                    Dashboard Online
+                </span>
+
+                <div class="profile">
+                    <div class="profile-icon">RG</div>
+                    <span>Security Admin</span>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- FLASH MESSAGES -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% for category, message in messages %}
+
+                <div class="flash-message {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endwith %}
+
+
+        <!-- OVERVIEW -->
+
+        <section id="overview">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Security Overview</h2>
+                    <p>Monitor your protected environment</p>
+                </div>
+            </div>
+
+
+            <!-- STATISTICS -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span>PROTECTED FILES</span>
+                        <div class="stat-icon cyan">▤</div>
+                    </div>
+
+                    <h2>{{ total_files }}</h2>
+
+                    <p>Files under monitoring</p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span>TOTAL ALERTS</span>
+                        <div class="stat-icon purple">⚠</div>
+                    </div>
+
+                    <h2>{{ total_alerts }}</h2>
+
+                    <p>Recorded security events</p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span>HIGH RISK ALERTS</span>
+                        <div class="stat-icon red">▲</div>
+                    </div>
+
+                    <h2>{{ high_risk }}</h2>
+
+                    <p>High and critical severity</p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span>AVAILABLE BACKUPS</span>
+                        <div class="stat-icon green">▣</div>
+                    </div>
+
+                    <h2>{{ total_backups }}</h2>
+
+                    <p>Stored backup versions</p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SECURITY ALERTS -->
+
+        <section id="alerts" class="content-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Security Alerts</h2>
+                    <p>Recently detected file activities</p>
+                </div>
+
+                <span class="section-tag">
+                    RECENT EVENTS
+                </span>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>FILE NAME</th>
+                            <th>EVENT TYPE</th>
+                            <th>RISK SCORE</th>
+                            <th>SEVERITY</th>
+                            <th>TIMESTAMP</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for alert in alerts %}
+
+                        <tr>
+
+                            <td class="file-name">
+                                {{ alert.filename or 'Unknown' }}
+                            </td>
+
+                            <td>
+                                {{ alert.event_type or 'Unknown' }}
+                            </td>
+
+                            <td>
+                                <span class="risk-score">
+                                    {{ alert.risk_score }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge {{ alert.risk_level | lower }}">
+                                    {{ alert.risk_level }}
+                                </span>
+                            </td>
+
+                            <td class="timestamp">
+                                {{ alert.timestamp }}
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+                            <td colspan="5" class="empty">
+                                No security alerts detected yet.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- BACKUP MANAGEMENT -->
+
+        <section id="backups" class="content-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Backup Management</h2>
+                    <p>Manage backup versions and file recovery</p>
+                </div>
+
+                <span class="section-tag green-tag">
+                    {{ total_backups }} BACKUPS
+                </span>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>ORIGINAL FILE</th>
+                            <th>BACKUP VERSION</th>
+                            <th>BACKUP DATE</th>
+                            <th>SIZE</th>
+                            <th>STATUS</th>
+                            <th>RECOVERY</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for backup in backups %}
+
+                        <tr>
+
+                            <td class="file-name">
+                                {{ backup.original_name }}
+                            </td>
+
+                            <td class="backup-name">
+                                {{ backup.backup_name }}
+                            </td>
+
+                            <td class="timestamp">
+                                {{ backup.backup_date }}
+                            </td>
+
+                            <td>
+                                {{ backup.size }} KB
+                            </td>
+
+                            <td>
+                                <span class="badge low">
+                                    {{ backup.status }}
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <form
+                                    action="{{ url_for('restore_file', backup_name=backup.backup_name) }}"
+                                    method="POST"
+                                    onsubmit="return confirm('Are you sure you want to restore this file?');">
+
+                                    <button type="submit" class="restore-btn">
+                                        ↻ Restore
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+                            <td colspan="6" class="empty">
+                                No backups available.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+
+        <footer class="footer">
+
+            <p>
+                © 2026 RansomGuard |
+                Ransomware Detection and Prevention System
+            </p>
+
+            <p>
+                Powered by Python · Flask · MySQL · SHA-256
+            </p>
+
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

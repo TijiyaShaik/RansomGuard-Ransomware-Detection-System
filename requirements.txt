@@ -1,0 +1,5 @@
+flask
+watchdog
+psutil
+mysql-connector-python
+python-dotenv
