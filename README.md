@@ -283,7 +283,7 @@ The backup and recovery module supports file restoration through the following p
 
 ## 👩‍💻 Author
 
-**YOUR NAME**
+Shaik Tijiya Bhanu
 
 B.Tech – Artificial Intelligence and Data Science
 
